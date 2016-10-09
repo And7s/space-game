@@ -1,18 +1,15 @@
 # Space delivery
 
 Space delivery is a html5 single player game. It features a spaceship that can destroy the environment in order to better navigate around.
+### play now: https://and7s.github.io/space-game/index.html
+![screenshot space delivery](https://raw.githubusercontent.com/And7s/space-game/master/screen.png)
 
-use arrow keys to rotate right and left. Up to accelerate. space to shoot.
-
-Land on a blue platform to repair your spaceship.
-
-Green platforms recharge your fuel.
-
-Collect all packages and deliver to the originating platform
-
-Try not to collide with the environment or the malcious cannon shots.
-
-destroy the environment and the cannons to easier navigate around.
+* use arrow keys to rotate right and left. Up to accelerate. space to shoot.
+* Land on a blue platform to repair your spaceship.
+* Green platforms recharge your fuel.
+* Collect all packages and deliver to the originating platform
+* Try not to collide with the environment or the malcious cannon shots.
+* destroy the environment and the cannons to easier navigate around.
 
 
 
