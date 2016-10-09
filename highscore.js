@@ -30,32 +30,31 @@ var Highscore = {
   },
 
   logging: function(message) {
-    if(debug) {
-      var obj = {
-        resolution: {
-          x: App.width,
-          y: App.height,
-          max_y: window.screen.availHeight,
-          max_x: window.screen.availWidth
-        },
-        client: {
-          userAgent: navigator.userAgent,
-          platform: navigator.platform,
-          language: navigator.language
-        }
-      };
-      console.log(obj);
 
-      var base = btoa(JSON.stringify(obj));
-      $.ajax({
-        url: 'https://and7s.de/static/space/logging.php',
-        type: 'POST',
-        data: {
-          message: message,
-          blob: base
-        }
-      });
-    }
+    var obj = {
+      resolution: {
+        x: App.width,
+        y: App.height,
+        max_y: window.screen.availHeight,
+        max_x: window.screen.availWidth
+      },
+      client: {
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        language: navigator.language
+      }
+    };
+
+    var base = btoa(JSON.stringify(obj));
+    $.ajax({
+      url: 'https://and7s.de/static/space/logging.php',
+      type: 'POST',
+      data: {
+        message: message,
+        blob: base
+      }
+    });
+
   },
 
 
