@@ -79,7 +79,7 @@ var Highscore = {
       $.post('https://and7s.de/static/space/submit-score.php', {
         name: $('#my-name').val(),
         level: App.level,
-        score: App.score
+        score: App.duration
       }, function(data) {
         Menu.showHome();
       });
