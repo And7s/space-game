@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="mobile-web-app-capable" content="yes">
+<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <title>SpaceGame 0.1 Andreas Schmelz</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+
+    <canvas id='c'></canvas>
+    <div class="mobile-btn">
+      <div class="up mbtn">
+        <img src="gfx/up.png">
+      </div>
+      <div class="right mbtn">
+        <img src="gfx/right.png">
+      </div>
+      <div class="left mbtn">
+        <img src="gfx/left.png">
+      </div>
+       <div class="shoot mbtn">
+        <img src="gfx/dot.png">
+      </div>
+    </div>
+
+    <div id="menu">
+      <div class="cont">
+        <div class="center">
+          <div class="c2" id="m2">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script type="text/javascript">
+  WebFontConfig = {
+    google: { families: [ 'Open+Sans:400,300:latin' ] }
+  };
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+  })(); </script>
+
+
+    <script type="text/javascript" src="jquery-2.1.1.min.js"></script>
+
+    <script type="text/javascript" src="lib.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+    <script type="text/javascript" src="highscore.js"></script>
+    <script type="text/javascript" src="ui.js"></script>
+    <script type="text/javascript" src="camera.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="map.js"></script>
+    <script type="text/javascript" src="bars.js"></script>
+    <script type="text/javascript" src="shots.js"></script>
+    <script type="text/javascript" src="particles.js"></script>
+    <script type="text/javascript" src="animations.js"></script>
+
+    <script type="text/javascript" src="game.js"></script>
+    <script type="text/javascript" src="player.js"></script>
+    <script type="text/javascript" src="underscore-min.js"></script>
+
+
+    <div id="main_menu" class="active">
+      <div class="m-main page">
+        <h1 class="title">Main menu</h1>
+        <div class="select">
+          <h2 class="js-menu-switch" data-to="campaign"><span>Campaign</span></h2>
+          <h2  class="js-menu-switch" data-to="highscore"><span>Highscore</span></h2>
+          <h2 class="js-menu-switch" data-to="about"><span>About</span></h2>
+        </div>
+      </div>
+      <div class="m-campaign page">
+        <div class="back js-menu-back">< back</div>
+        <h1 class="title">Campaign</h1>
+
+        <div class="select">
+          <h2 data-level="0"><span><img src="gfx/map.png"> Start</span></h2>
+          <h2 data-level="1"><span><img src="gfx/map_sea.png"> Sea</span></h2>
+          <h2 data-level="2"><span><img src="gfx/map_leaves.png"> Leaves</span></h2>
+          <h2 data-level="3"><span><img src="gfx/map_daynight.png"> Daynight</span></h2>
+        </div>
+      </div>
+      <div class="m-multi page">
+        <h1 class="title">Multiplayer</h1>
+        <div class="select">
+          <h2><span>Start</span></h2>
+        </div>
+      </div>
+
+      <div class="m-highscore page">
+        <div class="back js-menu-back">< back</div>
+        <h1 class="title">Highscore</h1>
+
+        <div id="highscore-wrap" class="hs">
+
+        </div>
+      </div>
+
+      <div class="m-about page">
+        <div class="back js-menu-back">< back</div>
+        <h1 class="title">About</h1>
+
+        <h2 class="text-center">
+         This game is a fan remade of GLX neo luxor. <br />It was programmed by Andreas Schmelz.
+        </h2>
+      </div>
+
+
+      <div class="m-multi page">
+        <h1 class="title">Multiplayer</h1>
+        <div class="select">
+          <h2><span>Start</span></h2>
+        </div>
+      </div>
+
+      <div class="m-multi page">
+        <h1 class="title">Pause</h1>
+        <div class="select">
+          <h2><span>continue</span></h2>
+          <h2><span>back to main menu</span></h2>
+        </div>
+      </div>
+
+    </div>
+
+    <script type="text/javascript">
+      //menu logic (menu as html)
+
+
+
+
+
+var Menu = {
+  state: 0,
+  active: true,
+  hide_timeout: null,
+  prev: "",
+
+  showPause: function() {
+    if(App.mobile) $('.mobile-btn').removeClass('visible');
+    this.state = 3;
+    this.show();
+    /*
+    $('#m2').html(
+      _.template($('#tmpl-pause').html())({})
+    );
+    $('#menu').addClass('active');*/
+  },
+
+  showHome: function() {
+    $('#main_menu .m-main').css({left: 0});
+    $('#main_menu .m-'+this.prev).css({left: '100%'});
+    this.show();
+  },
+
+  hide: function() {
+    if(!this.active) return;    //already gone
+    this.active = false;
+    this.hide_timeout = setTimeout(function() {
+      $('#main_menu').hide();
+    }, 1000);
+    $('#main_menu').removeClass('active');
+  },
+
+  show: function() {
+    if(this.active) return;   //already showing
+    this.active = true;
+    $('#main_menu').show();
+    clearTimeout(this.hide_timeout);
+    $('#main_menu').css({top: '0px'});
+    $('#main_menu').addClass('active');
+  },
+
+  //drawing the menu onscreen and capturing user actions
+  draw: function() {
+
+  },
+
+  initialize: function() {
+    $('#main_menu .js-menu-switch').click(function() {
+      var to = $(this).data('to');
+      Menu.prev = to;
+      $('#main_menu .m-main').css({left: '-100%'});
+      $('#main_menu .m-'+to).css({left: 0});
+      if (to == "highscore") {
+        Highscore.renderpage();
+      }
+    });
+    $('.select h2').click(function() {
+      console.log("Menu click on level to load");
+      console.log("load "+$(this).data('level'));
+      App.LoadLevel($(this).data('level'));
+      Menu.hide();
+    });
+
+    $('#main_menu .js-menu-back').click(function() {
+      Menu.showHome();
+    });
+
+    $('body').on('click', '.js-main-menu', function() {
+      Menu.showHome();
+    })
+  }
+};
+
+    </script>
+
+    <script type="text/template" id="tmpl-pause">
+      <div class="menu-pause">
+        <h1>Pause</h1>
+        <a href="#main" class="js-main-menu">Main menu</a>
+      </div>
+    </script>
+
+    <script type="text/template" id="tmpl-highscore">
+      <div>
+        <% _.each(arr, function(hs, idx) { %>
+          <div class="hs-level">
+            <h2>Level <%= idx + 1 %></h2>
+            <% _.each(hs, function(player) { %>
+              <div class="hs-row">
+                <span>
+                  <%= player.name %>: <%= player.score / 1000 %>
+                </span>
+              </div>
+            <% }) %>
+          </div>
+        <% }) %>
+      </div>
+    </script>
+
+    <script type="text/template" id="tmpl-finished">
+      <div class="menu-finished">
+        <h1>Level completed</h1>
+        in <%= secs %> seconds
+
+        <table>
+        <thead>
+          <tr>
+            <td>#</td>
+            <td>name</td>
+            <td>time</td>
+          </tr>
+        </thead>
+
+        <% var i = 0; _.each(hs, function(h) {  %>
+
+          <% if(i == seat) { %>
+            <tr>
+              <td><%= ++i %></td>
+              <td><input type="text" maxlength="15" name="name" placeholder="your name" id="my-name" /></td>
+              <td><%= (App.duration/1000) %>s</td>
+              <td><button type="submit" class="js-submit-score">&#10003; save</button></td>
+            </tr>
+          <% } %>
+          <tr>
+            <td><%= ++i %></td>
+            <td><%= h.name %></td>
+            <td><%= (h.score/1000) %>s</td>
+          </tr>
+        <% }) %>
+
+        <% if(i == 0) { %>
+            <tr>
+              <td><%= ++i %></td>
+              <td><input type="text" maxlength="15" name="name" placeholder="your name" id="my-name" /></td>
+              <td><%= (App.duration/1000) %>s</td>
+              <td><button type="submit" class="js-submit-score">&#10003; save</button></td>
+            </tr>
+          <% } %>
+
+
+        </table>
+        <a href="#main" class="js-main-menu">Main menu (skip saving)</a>
+      </div>
+    </script>
+
+    <script type="text/javascript">
+
+
+      //modernizr style webkit detect
+      if('WebkitAppearance' in document.documentElement.style) {
+        $('html').addClass('webkit');
+        App.webkit = true;
+      }else {
+        App.webkit = false;
+      }
+
+    </script>
+
+  </body>
+</html>
