@@ -271,7 +271,7 @@ var Menu = {
           </tr>
         <% }) %>
 
-        <% if(i == 0) { %>
+        <% if(i == 0 || i == hs.length) { %>
             <tr>
               <td><%= ++i %></td>
               <td><input type="text" maxlength="15" name="name" placeholder="your name" id="my-name" /></td>
